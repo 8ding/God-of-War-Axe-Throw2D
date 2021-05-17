@@ -15,21 +15,16 @@ public class PlayerMoveMent : MonoBehaviour
     private Vector2 moveDirection;
     private Animator _animator;
     public Transform WeaponPosition;
-    public Transform Destination;
 
-    private bool weaponOnhand;
     public event Action<Vector3> FireWeapon;
-    public event Action<Vector3> CallBack;
-    public event Action<Vector3> PlayerMove; 
+    public event Action CallBack;
 
-    private WeaponController weapon;
+
+
     void Start()
     {
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody2D>();
-        weaponOnhand = true;
-        weapon = GetComponentInChildren<WeaponController>();
-        weapon.WeaponBack += handleWeaponBack;
     }
 
     // Update is called once per frame
@@ -39,8 +34,6 @@ public class PlayerMoveMent : MonoBehaviour
         faceDirection();
         switchAnim();
         weaponTest();
-        if(!weaponOnhand)
-            PlayerMove?.Invoke(WeaponPosition.position);
     }
 
     private void FixedUpdate()
@@ -85,20 +78,21 @@ public class PlayerMoveMent : MonoBehaviour
 
     private void weaponTest()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            FireWeapon?.Invoke(Destination.position);
-            weaponOnhand = false;
+            //鼠标屏幕位置转世界坐标位置,要设定深度，这个深度z就是你所定义的屏幕距摄像机的距离
+            Vector3 mouseWorlPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,
+                transform.position.z - Camera.main.transform.position.z));
+
+            Vector3 Destination = new Vector3(mouseWorlPosition.x, mouseWorlPosition.y, 0);
+            Debug.DrawRay(transform.position, Destination - transform.position, Color.green, 1f);
+            FireWeapon?.Invoke(Destination);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftAlt))
         {
-            CallBack?.Invoke(WeaponPosition.position);
+            CallBack?.Invoke();
         }
     }
-
-    private void handleWeaponBack()
-    {
-        weaponOnhand = true;
-    }
+    
 }
