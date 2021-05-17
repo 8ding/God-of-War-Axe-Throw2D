@@ -41,6 +41,7 @@ namespace Weapon
         private void Update()
         {
             moveCalculation();
+            rotation();
             inHandTest();
         }
 
@@ -124,6 +125,7 @@ namespace Weapon
             if (IsInHand)
             {
                 transform.SetParent(_playerMoveMent.transform);
+                transform.localRotation = originRotation;
                 _rigidbody2D.simulated = false;
             }
             else
@@ -136,11 +138,10 @@ namespace Weapon
         private void rotation()
         {
             if (IsOut)
-                transform.localRotation = new Quaternion(transform.localRotation.x, transform.localRotation.y,
-                    transform.localRotation.z + RotationSpeed,0f);
+                transform.Rotate(0,0,10 * RotationSpeed * Time.deltaTime);
             if(IsCallBack)
-                transform.localRotation = new Quaternion(transform.localRotation.x, transform.localRotation.y,
-                    transform.localRotation.z + RotationSpeed,0f);
+                transform.Rotate(0,0,-10 * RotationSpeed * Time.deltaTime);
+                
         }
     }
 }

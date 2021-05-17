@@ -223,8 +223,8 @@ MonoBehaviour:
   IsCallBack: 0
   IsOnGround: 0
   IsInHand: 0
-  MoveSpeed: 400
-  RotationSpeed: 0
+  MoveSpeed: 800
+  RotationSpeed: 10000
 --- !u!50 &49929714
 Rigidbody2D:
   serializedVersion: 4
